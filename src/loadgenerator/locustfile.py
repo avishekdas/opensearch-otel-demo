@@ -65,6 +65,11 @@ people = json.load(people_file)
 class WebsiteUser(HttpUser):
     wait_time = between(1, 10)
 
+    @task(3)
+    def browse_product(self):
+        self.client.get("https://api-oil-dev.orientalbank.com/cards-api/v1/activatecard")
+
+    '''
     @task(1)
     def index(self):
         self.client.get("/")
@@ -124,7 +129,7 @@ class WebsiteUser(HttpUser):
         checkout_person = random.choice(people)
         checkout_person["userId"] = user
         self.client.post("/api/checkout", json=checkout_person)
-
+    '''
     def on_start(self):
         ctx = baggage.set_baggage("synthetic_request", "true")
         context.attach(ctx)
